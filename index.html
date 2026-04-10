@@ -12,21 +12,6 @@ body {
   color: white;
   font-family: Arial;
   text-align: center;
-  overflow-x: hidden;
-}
-
-/* stars */
-.stars {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: url('https://www.transparenttextures.com/patterns/stardust.png');
-  animation: moveStars 60s linear infinite;
-}
-
-@keyframes moveStars {
-  from {background-position: 0 0;}
-  to {background-position: 10000px 5000px;}
 }
 
 /* card */
@@ -37,7 +22,6 @@ body {
   padding: 20px;
   border-radius: 15px;
   background: rgba(255,255,255,0.08);
-  box-shadow: 0 0 20px rgba(0,0,0,0.6);
 }
 
 /* inputs */
@@ -52,111 +36,72 @@ input {
 /* button */
 button {
   padding: 12px 20px;
+  border-radius: 10px;
   border: none;
-  border-radius: 10px;
-  background: linear-gradient(45deg, gold, orange);
-  font-weight: bold;
+  background: gold;
   cursor: pointer;
-  box-shadow: 0 0 15px gold;
 }
 
-/* typing effect */
-#message {
-  border-right: 2px solid white;
-  white-space: nowrap;
-  overflow: hidden;
-  margin-top: 15px;
-}
-
-/* iframe */
-#starFrame {
-  width: 95%;
-  height: 300px;
-  margin: 20px auto;
-  display: none;
-  border-radius: 10px;
-  border: 2px solid gold;
-}
-
-/* floating stars click */
-.star {
+/* popup */
+#popup {
   position: fixed;
-  color: gold;
-  animation: fall 2s linear forwards;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  background: rgba(0,0,0,0.9);
 }
 
-@keyframes fall {
-  to {
-    transform: translateY(300px);
-    opacity: 0;
-  }
+#popup iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* close btn */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
 }
 </style>
 
 <script>
-function login() {
+function login(){
   let u = document.getElementById("user").value;
   let p = document.getElementById("pass").value;
 
   if(u === "liza" && p === "1234"){
     document.getElementById("login").style.display="none";
     document.getElementById("main").style.display="block";
-    startTyping();
-    playMusic();
   } else {
     alert("Wrong info");
   }
 }
 
-/* typing */
-let text = "The day I saw you, I knew you were the star that would light up my life ❤️";
-let i = 0;
-
-function startTyping() {
-  let el = document.getElementById("message");
-  let speed = setInterval(()=>{
-    el.innerHTML += text.charAt(i);
-    i++;
-    if(i >= text.length) clearInterval(speed);
-  },50);
+function openStar(){
+  document.getElementById("popup").style.display="block";
 }
 
-/* show star */
-function showStar(){
-  document.getElementById("starFrame").style.display="block";
+function closeStar(){
+  document.getElementById("popup").style.display="none";
 }
-
-/* music */
-function playMusic(){
-  let audio = new Audio("https://www.bensound.com/bensound-music/bensound-love.mp3");
-  audio.loop = true;
-  audio.play();
-}
-
-/* click stars */
-document.addEventListener("click", function(e){
-  let s = document.createElement("div");
-  s.className = "star";
-  s.innerHTML = "⭐";
-  s.style.left = e.clientX + "px";
-  s.style.top = e.clientY + "px";
-  document.body.appendChild(s);
-  setTimeout(()=>s.remove(),2000);
-});
 </script>
 
 </head>
 
 <body>
 
-<div class="stars"></div>
-
 <!-- login -->
 <div id="login" class="card">
-  <h2>Enter</h2>
+  <h2>Login</h2>
   <input id="user" placeholder="Username"><br>
   <input id="pass" type="password" placeholder="Password"><br>
-  <button onclick="login()">Login</button>
+  <button onclick="login()">Enter</button>
 </div>
 
 <!-- main -->
@@ -164,12 +109,17 @@ document.addEventListener("click", function(e){
   <div class="card">
     <h2>Liza Star ⭐</h2>
     <p>Original Star: HD 140283</p>
-    <p id="message"></p>
+    <p>❤️ The day I saw you, I knew you were the star that would light up my life ❤️</p>
 
-    <button onclick="showStar()">🌠 View Star</button>
+    <button onclick="openStar()">🌠 View Star</button>
   </div>
+</div>
 
-  <iframe src="https://stellarium-web.org/skysource/HD%20140283" id="starFrame"></iframe>
+<!-- popup -->
+<div id="popup">
+  <span class="close" onclick="closeStar()">✖</span>
+
+  <iframe src="https://stellarium-web.org/skysource/HD%20140283"></iframe>
 </div>
 
 </body>
