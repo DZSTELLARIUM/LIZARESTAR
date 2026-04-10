@@ -27,10 +27,11 @@ body {
 /* inputs */
 input {
   width: 80%;
-  padding: 10px;
+  padding: 12px;
   margin: 10px;
   border-radius: 8px;
   border: none;
+  font-size: 16px;
 }
 
 /* button */
@@ -40,6 +41,7 @@ button {
   border: none;
   background: gold;
   cursor: pointer;
+  font-size: 16px;
 }
 
 /* popup */
@@ -50,7 +52,8 @@ button {
   width: 100%;
   height: 100%;
   display: none;
-  background: rgba(0,0,0,0.9);
+  background: black;
+  z-index: 999;
 }
 
 #popup iframe {
@@ -59,14 +62,28 @@ button {
   border: none;
 }
 
-/* close btn */
 .close {
   position: absolute;
   top: 10px;
   right: 20px;
-  font-size: 20px;
+  font-size: 25px;
   color: white;
   cursor: pointer;
+}
+
+/* stars click */
+.star {
+  position: fixed;
+  color: gold;
+  pointer-events: none;
+  animation: fall 2s linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(200px);
+    opacity: 0;
+  }
 }
 </style>
 
@@ -90,6 +107,31 @@ function openStar(){
 function closeStar(){
   document.getElementById("popup").style.display="none";
 }
+
+/* ⭐ النجوم (مصححة للهاتف) */
+document.addEventListener("click", function(e){
+
+  // ❌ تجاهل كل العناصر التفاعلية
+  if(
+    e.target.tagName === "INPUT" ||
+    e.target.tagName === "BUTTON" ||
+    e.target.tagName === "IFRAME" ||
+    e.target.closest("#login") ||
+    e.target.closest("#popup")
+  ){
+    return;
+  }
+
+  let s = document.createElement("div");
+  s.className = "star";
+  s.innerHTML = "⭐";
+  s.style.left = e.clientX + "px";
+  s.style.top = e.clientY + "px";
+
+  document.body.appendChild(s);
+
+  setTimeout(()=>s.remove(),2000);
+});
 </script>
 
 </head>
@@ -115,10 +157,9 @@ function closeStar(){
   </div>
 </div>
 
-<!-- popup -->
+<!-- popup stellarium -->
 <div id="popup">
   <span class="close" onclick="closeStar()">✖</span>
-
   <iframe src="https://stellarium-web.org/skysource/HD%20140283"></iframe>
 </div>
 
