@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Star Gift</title>
+<title>VIP Star Gift</title>
 
 <style>
 body {
@@ -12,6 +12,21 @@ body {
   background: radial-gradient(circle, #0b0c2b, #000);
   color: white;
   text-align: center;
+  overflow: hidden;
+}
+
+/* خلفية نجوم */
+.stars {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: url('https://www.transparenttextures.com/patterns/stardust.png');
+  animation: move 60s linear infinite;
+}
+
+@keyframes move {
+  from {background-position: 0 0;}
+  to {background-position: 10000px 5000px;}
 }
 
 /* card */
@@ -22,7 +37,7 @@ body {
   padding: 20px;
   border-radius: 15px;
   background: rgba(255,255,255,0.08);
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  box-shadow: 0 0 25px rgba(0,0,0,0.6);
 }
 
 /* inputs */
@@ -43,7 +58,7 @@ button {
   background: linear-gradient(45deg, gold, orange);
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 0 10px gold;
+  box-shadow: 0 0 15px gold;
 }
 
 /* popup */
@@ -64,13 +79,11 @@ button {
   border: none;
 }
 
-.close {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  font-size: 25px;
-  color: white;
-  cursor: pointer;
+/* typing */
+#msg {
+  border-right: 2px solid white;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>
 
@@ -82,17 +95,36 @@ function login(){
   if(u === "liza" && p === "1234"){
     document.getElementById("login").style.display="none";
     document.getElementById("main").style.display="block";
+    startTyping();
+    playMusic();
   } else {
-    alert("Wrong username or password");
+    alert("Wrong info");
   }
 }
 
-function openStar(){
-  document.getElementById("popup").style.display="block";
+/* typing effect */
+let text = "The day I saw you, I knew you were the star that would light up my life ❤️";
+let i = 0;
+
+function startTyping(){
+  let el = document.getElementById("msg");
+  let speed = setInterval(()=>{
+    el.innerHTML += text.charAt(i);
+    i++;
+    if(i >= text.length) clearInterval(speed);
+  },50);
 }
 
-function closeStar(){
-  document.getElementById("popup").style.display="none";
+/* music */
+function playMusic(){
+  let audio = new Audio("https://www.bensound.com/bensound-music/bensound-love.mp3");
+  audio.loop = true;
+  audio.play().catch(()=>{});
+}
+
+/* فتح النجم */
+function openStar(){
+  document.getElementById("popup").style.display="block";
 }
 </script>
 
@@ -100,9 +132,11 @@ function closeStar(){
 
 <body>
 
+<div class="stars"></div>
+
 <!-- login -->
 <div id="login" class="card">
-  <h2>Welcome</h2>
+  <h2>Private Access</h2>
   <input id="user" placeholder="Username"><br>
   <input id="pass" type="password" placeholder="Password"><br>
   <button onclick="login()">Enter</button>
@@ -114,17 +148,14 @@ function closeStar(){
     <h2>Liza Star ⭐</h2>
     <p>Original Star: HD 140283</p>
 
-    <p>
-      ❤️ The day I saw you, I knew you were the star that would light up my life ❤️
-    </p>
+    <p id="msg"></p>
 
     <button onclick="openStar()">🌠 View Your Star</button>
   </div>
 </div>
 
-<!-- stellarium popup -->
+<!-- popup بدون زر إغلاق -->
 <div id="popup">
-  <span class="close" onclick="closeStar()">✖</span>
   <iframe src="https://stellarium-web.org/skysource/HD%20140283"></iframe>
 </div>
 
