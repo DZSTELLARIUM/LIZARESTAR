@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Star Registry</title>
+<title>Star Gift</title>
 
 <style>
 body {
   margin: 0;
+  font-family: Arial;
   background: radial-gradient(circle, #0b0c2b, #000);
   color: white;
-  font-family: Arial;
   text-align: center;
 }
 
@@ -18,15 +18,16 @@ body {
 .card {
   width: 90%;
   max-width: 400px;
-  margin: 60px auto;
+  margin: 80px auto;
   padding: 20px;
   border-radius: 15px;
   background: rgba(255,255,255,0.08);
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
 /* inputs */
 input {
-  width: 80%;
+  width: 85%;
   padding: 12px;
   margin: 10px;
   border-radius: 8px;
@@ -39,9 +40,10 @@ button {
   padding: 12px 20px;
   border-radius: 10px;
   border: none;
-  background: gold;
+  background: linear-gradient(45deg, gold, orange);
+  font-weight: bold;
   cursor: pointer;
-  font-size: 16px;
+  box-shadow: 0 0 10px gold;
 }
 
 /* popup */
@@ -70,21 +72,6 @@ button {
   color: white;
   cursor: pointer;
 }
-
-/* stars click */
-.star {
-  position: fixed;
-  color: gold;
-  pointer-events: none;
-  animation: fall 2s linear forwards;
-}
-
-@keyframes fall {
-  to {
-    transform: translateY(200px);
-    opacity: 0;
-  }
-}
 </style>
 
 <script>
@@ -96,7 +83,7 @@ function login(){
     document.getElementById("login").style.display="none";
     document.getElementById("main").style.display="block";
   } else {
-    alert("Wrong info");
+    alert("Wrong username or password");
   }
 }
 
@@ -107,31 +94,6 @@ function openStar(){
 function closeStar(){
   document.getElementById("popup").style.display="none";
 }
-
-/* ⭐ النجوم (مصححة للهاتف) */
-document.addEventListener("click", function(e){
-
-  // ❌ تجاهل كل العناصر التفاعلية
-  if(
-    e.target.tagName === "INPUT" ||
-    e.target.tagName === "BUTTON" ||
-    e.target.tagName === "IFRAME" ||
-    e.target.closest("#login") ||
-    e.target.closest("#popup")
-  ){
-    return;
-  }
-
-  let s = document.createElement("div");
-  s.className = "star";
-  s.innerHTML = "⭐";
-  s.style.left = e.clientX + "px";
-  s.style.top = e.clientY + "px";
-
-  document.body.appendChild(s);
-
-  setTimeout(()=>s.remove(),2000);
-});
 </script>
 
 </head>
@@ -140,7 +102,7 @@ document.addEventListener("click", function(e){
 
 <!-- login -->
 <div id="login" class="card">
-  <h2>Login</h2>
+  <h2>Welcome</h2>
   <input id="user" placeholder="Username"><br>
   <input id="pass" type="password" placeholder="Password"><br>
   <button onclick="login()">Enter</button>
@@ -151,13 +113,16 @@ document.addEventListener("click", function(e){
   <div class="card">
     <h2>Liza Star ⭐</h2>
     <p>Original Star: HD 140283</p>
-    <p>❤️ The day I saw you, I knew you were the star that would light up my life ❤️</p>
 
-    <button onclick="openStar()">🌠 View Star</button>
+    <p>
+      ❤️ The day I saw you, I knew you were the star that would light up my life ❤️
+    </p>
+
+    <button onclick="openStar()">🌠 View Your Star</button>
   </div>
 </div>
 
-<!-- popup stellarium -->
+<!-- stellarium popup -->
 <div id="popup">
   <span class="close" onclick="closeStar()">✖</span>
   <iframe src="https://stellarium-web.org/skysource/HD%20140283"></iframe>
