@@ -2,19 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Star Registry Record</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star Registry</title>
 
 <style>
 body {
   margin: 0;
-  overflow-x: hidden;
   background: radial-gradient(circle, #0b0c2b, #000);
   color: white;
   font-family: Arial;
   text-align: center;
+  overflow-x: hidden;
 }
 
-/* خلفية النجوم */
+/* stars */
 .stars {
   position: fixed;
   width: 100%;
@@ -28,110 +29,120 @@ body {
   to {background-position: 10000px 5000px;}
 }
 
-/* مجرات */
-.galaxy {
-  position: fixed;
-  width: 150px;
-  opacity: 0.4;
-  animation: spin 40s linear infinite;
-}
-
-.left-galaxy {
-  left: 10px;
-  top: 30%;
-}
-
-.right-galaxy {
-  right: 10px;
-  top: 60%;
-}
-
-@keyframes spin {
-  from {transform: rotate(0deg);}
-  to {transform: rotate(360deg);}
-}
-
-/* البطاقة */
+/* card */
 .card {
-  background: rgba(255,255,255,0.08);
-  padding: 25px;
+  width: 90%;
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 20px;
   border-radius: 15px;
-  display: inline-block;
-  box-shadow: 0 0 25px rgba(0,0,0,0.7);
-  margin-top: 50px;
-  animation: float 4s ease-in-out infinite;
+  background: rgba(255,255,255,0.08);
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
 }
 
-@keyframes float {
-  0% {transform: translateY(0);}
-  50% {transform: translateY(-10px);}
-  100% {transform: translateY(0);}
+/* inputs */
+input {
+  width: 80%;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 8px;
+  border: none;
 }
 
-h1 {
-  color: gold;
-}
-
-/* زر */
-.star-btn {
-  padding: 12px 25px;
+/* button */
+button {
+  padding: 12px 20px;
   border: none;
   border-radius: 10px;
   background: linear-gradient(45deg, gold, orange);
-  color: black;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 20px;
   box-shadow: 0 0 15px gold;
-  transition: 0.3s;
 }
 
-.star-btn:hover {
-  transform: scale(1.1);
+/* typing effect */
+#message {
+  border-right: 2px solid white;
+  white-space: nowrap;
+  overflow: hidden;
+  margin-top: 15px;
 }
 
 /* iframe */
 #starFrame {
-  width: 90%;
-  height: 500px;
-  margin: 30px auto;
-  border-radius: 15px;
+  width: 95%;
+  height: 300px;
+  margin: 20px auto;
   display: none;
+  border-radius: 10px;
   border: 2px solid gold;
 }
 
-.fade {
-  opacity: 0;
-  animation: fadeIn 2s forwards;
+/* floating stars click */
+.star {
+  position: fixed;
+  color: gold;
+  animation: fall 2s linear forwards;
 }
 
-@keyframes fadeIn {
-  to {opacity: 1;}
-}
-
-input {
-  padding: 8px;
-  border-radius: 5px;
-  border: none;
+@keyframes fall {
+  to {
+    transform: translateY(300px);
+    opacity: 0;
+  }
 }
 </style>
 
 <script>
 function login() {
-  var user = document.getElementById("user").value;
-  var pass = document.getElementById("pass").value;
+  let u = document.getElementById("user").value;
+  let p = document.getElementById("pass").value;
 
-  if(user === "liza" && pass === "1234"){
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("content").style.display = "block";
+  if(u === "liza" && p === "1234"){
+    document.getElementById("login").style.display="none";
+    document.getElementById("main").style.display="block";
+    startTyping();
+    playMusic();
   } else {
-    alert("Access Denied");
+    alert("Wrong info");
   }
 }
 
-function showStar() {
-  document.getElementById("starFrame").style.display = "block";
+/* typing */
+let text = "The day I saw you, I knew you were the star that would light up my life ❤️";
+let i = 0;
+
+function startTyping() {
+  let el = document.getElementById("message");
+  let speed = setInterval(()=>{
+    el.innerHTML += text.charAt(i);
+    i++;
+    if(i >= text.length) clearInterval(speed);
+  },50);
 }
+
+/* show star */
+function showStar(){
+  document.getElementById("starFrame").style.display="block";
+}
+
+/* music */
+function playMusic(){
+  let audio = new Audio("https://www.bensound.com/bensound-music/bensound-love.mp3");
+  audio.loop = true;
+  audio.play();
+}
+
+/* click stars */
+document.addEventListener("click", function(e){
+  let s = document.createElement("div");
+  s.className = "star";
+  s.innerHTML = "⭐";
+  s.style.left = e.clientX + "px";
+  s.style.top = e.clientY + "px";
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),2000);
+});
 </script>
 
 </head>
@@ -140,37 +151,25 @@ function showStar() {
 
 <div class="stars"></div>
 
-<!-- مجرات -->
-<img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Spiral_Galaxy_M101.jpg" class="galaxy left-galaxy">
-<img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Spiral_Galaxy_M101.jpg" class="galaxy right-galaxy">
-
-<div id="loginBox" class="fade">
-  <h2>Star Registry Access</h2>
-  <input type="text" id="user" placeholder="Username"><br><br>
-  <input type="password" id="pass" placeholder="Password"><br><br>
-  <button onclick="login()">Enter</button>
+<!-- login -->
+<div id="login" class="card">
+  <h2>Enter</h2>
+  <input id="user" placeholder="Username"><br>
+  <input id="pass" type="password" placeholder="Password"><br>
+  <button onclick="login()">Login</button>
 </div>
 
-<div id="content" style="display:none;">
-  <div class="card fade">
-    <h1>Star Registry Record</h1>
+<!-- main -->
+<div id="main" style="display:none;">
+  <div class="card">
+    <h2>Liza Star ⭐</h2>
+    <p>Original Star: HD 140283</p>
+    <p id="message"></p>
 
-    <p><strong>Star Name:</strong> Liza Star</p>
-    <p><strong>Original Star:</strong> HD 140283</p>
-    <p><strong>Constellation:</strong> Libra</p>
-
-    <p><strong>Message:</strong> ❤️ في اليوم الذي رأيتك فيه عرفت انك النجم الذي سيضيء حياتي ❤️</p>
-
-    <button class="star-btn" onclick="showStar()">
-      🌠 View Your Star 🌠
-    </button>
+    <button onclick="showStar()">🌠 View Star</button>
   </div>
 
-  <iframe 
-    id="starFrame"
-    src="https://stellarium-web.org/skysource/HD%20140283">
-  </iframe>
-
+  <iframe src="https://stellarium-web.org/skysource/HD%20140283" id="starFrame"></iframe>
 </div>
 
 </body>
